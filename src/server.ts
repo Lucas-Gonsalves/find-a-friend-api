@@ -1,8 +1,5 @@
-import { fastify } from "fastify";
+import { app } from './app'
 
-const app = fastify()
-
-
-app.listen({port: 3333}).then(() => {
-  console.log("🚀 HTTP Server is running!")
+app.listen({ port: 3333 }).then(() => {
+  console.log('🚀 HTTP Server is running!')
 })
