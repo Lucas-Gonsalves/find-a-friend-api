@@ -26,4 +26,28 @@ describe('Create Org', () => {
 
     expect(org).toBeDefined()
   })
+
+  it('should not be able to create a new org using an email already exitent', async () => {
+    await sut.execute({
+      username: 'Lucas',
+      email: 'org@example.com',
+      passwordHash: '123456',
+      phone: '(47) 99630-7545',
+      city: 'Guramirim',
+      cep: '89270-000',
+      address: 'Rolf passold',
+    })
+
+    await expect(async () => {
+      await sut.execute({
+        username: 'Lucas',
+        email: 'org@example.com',
+        passwordHash: '123456',
+        phone: '(47) 99630-7545',
+        city: 'Guramirim',
+        cep: '89270-000',
+        address: 'Rolf passold',
+      })
+    }).rejects.toThrow()
+  })
 })
