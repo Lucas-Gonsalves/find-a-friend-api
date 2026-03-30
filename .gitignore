@@ -144,3 +144,7 @@ vite.config.ts.timestamp-*
 db/*.db
 /generated/prisma
 /generated
+
+/generated/prisma
+
+/generated/prisma

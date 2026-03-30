@@ -7,10 +7,12 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "esnext",
-    "target": "es2023",
+    "module": "esnext",    
     "moduleResolution": "bundler",
+    "target": "es2023",
+    "strict": true,
     "ignoreDeprecations": "5.0",
+    "esModuleInterop": true,
     "types": [],
     "baseUrl": "./",
     "paths": {
@@ -39,7 +41,6 @@
     // "noPropertyAccessFromIndexSignature": true,
 
     // Recommended Options
-    "strict": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
