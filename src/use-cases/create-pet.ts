@@ -20,7 +20,7 @@ interface CreatePetUseCaseResponse {
 }
 
 export class CreatePetUseCase {
-  constructor(private PetsRepository: PetsRepository) {}
+  constructor(private petsRepository: PetsRepository) {}
 
   async execute({
     age,
@@ -34,7 +34,7 @@ export class CreatePetUseCase {
     environment,
     adoptionRequirement,
   }: CreatePetUseCaseRequest): Promise<CreatePetUseCaseResponse> {
-    const pet = await this.PetsRepository.create({
+    const pet = await this.petsRepository.create({
       age,
       name,
       description,

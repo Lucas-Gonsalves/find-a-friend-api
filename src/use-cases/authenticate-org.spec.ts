@@ -6,7 +6,7 @@ import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-
 import { AuthenticateOrgUseCase } from './authenticate-org'
 import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 
-describe('Authenticate Org', () => {
+describe('Authenticate Org Use Case', () => {
   let repository: InMemoryOrgsRepository
   let sut: AuthenticateOrgUseCase
 

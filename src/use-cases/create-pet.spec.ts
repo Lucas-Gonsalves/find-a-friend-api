@@ -6,7 +6,7 @@ import { InMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pets-
 
 import { CreatePetUseCase } from './create-pet'
 
-describe('Create Pet', () => {
+describe('Create Pet Use Case', () => {
   let orgRepository: InMemoryOrgsRepository
   let petRepository: InMemoryPetsRepository
   let sut: CreatePetUseCase
@@ -31,7 +31,7 @@ describe('Create Pet', () => {
     const { pet } = await sut.execute({
       age: 12,
       name: 'Rex',
-      description: 'Descritpion',
+      description: 'description',
       image: 'link-of-the-dog-image',
       orgId: org.id,
       size: 'MEDIUM',

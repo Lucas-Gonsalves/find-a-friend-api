@@ -17,6 +17,12 @@ export class InMemoryPetsRepository implements PetsRepository {
     return pet
   }
 
+  async findMany() {
+    const pets = this.items
+
+    return pets
+  }
+
   async create(data: Prisma.PetUncheckedCreateInput) {
     const adoption_requirement = Array.isArray(data.adoption_requirement)
       ? data.adoption_requirement

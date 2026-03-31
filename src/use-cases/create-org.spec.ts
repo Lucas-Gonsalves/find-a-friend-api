@@ -5,7 +5,7 @@ import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-
 import { CreateOrgUseCase } from './create-org'
 import { OrgAlreadyExistsError } from './errors/org-already-exists-error'
 
-describe('Create Org', () => {
+describe('Create Org Use Case', () => {
   let repository: InMemoryOrgsRepository
   let sut: CreateOrgUseCase
 

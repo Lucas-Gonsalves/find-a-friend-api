@@ -18,6 +18,12 @@ export class InMemoryOrgsRepository implements OrgsRepository {
     return org
   }
 
+  async findManyByCity(city: string) {
+    const orgs = this.items.filter((org) => org.city === city)
+
+    return orgs
+  }
+
   async create(data: OrgCreateInput) {
     const org: Org = {
       id: randomUUID(),
