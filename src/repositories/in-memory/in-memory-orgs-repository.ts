@@ -8,13 +8,17 @@ import type { OrgsRepository } from '../orgs-repository'
 export class InMemoryOrgsRepository implements OrgsRepository {
   public items: Org[] = []
 
-  async create(data: OrgCreateInput) {
-    const orgAlreadyExists = this.items.find((org) => org.email === data.email)
+  async findByEmail(email: string) {
+    const org = this.items.find((org) => org.email === email)
 
-    if (orgAlreadyExists) {
+    if (!org) {
       return null
     }
 
+    return org
+  }
+
+  async create(data: OrgCreateInput) {
     const org: Org = {
       id: randomUUID(),
       email: data.email,

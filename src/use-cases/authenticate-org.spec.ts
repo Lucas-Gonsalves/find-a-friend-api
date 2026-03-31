@@ -1,38 +1,44 @@
+import { hash } from 'bcryptjs'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 
-import { CreateOrgUseCase } from './create-org'
-import { OrgAlreadyExistsError } from './errors/org-already-exists-error'
+import { AuthenticateOrgUseCase } from './authenticate-org'
+import { InvalidCredentialsError } from './errors/invalid-credentials-error'
 
-describe('Create Org', () => {
+describe('Authenticate Org', () => {
   let repository: InMemoryOrgsRepository
-  let sut: CreateOrgUseCase
+  let sut: AuthenticateOrgUseCase
 
   beforeEach(() => {
     repository = new InMemoryOrgsRepository()
-    sut = new CreateOrgUseCase(repository)
+    sut = new AuthenticateOrgUseCase(repository)
   })
 
-  it('should be able to create a new org', async () => {
-    const { org } = await sut.execute({
+  it('should be able to authenticate', async () => {
+    await repository.create({
       username: 'Lucas',
       email: 'org@example.com',
-      password: '123456',
+      password_hash: await hash('123456', 6),
       phone: '(47) 99630-7545',
       city: 'Guramirim',
       cep: '89270-000',
       address: 'Rolf passold',
     })
 
+    const { org } = await sut.execute({
+      email: 'org@example.com',
+      password: '123456',
+    })
+
     expect(org.id).toEqual(expect.any(String))
   })
 
-  it('should not be able to create a new org using an email already exitent', async () => {
-    await sut.execute({
+  it('should not be able to authenticate with wrong credentials', async () => {
+    await repository.create({
       username: 'Lucas',
       email: 'org@example.com',
-      password: '123456',
+      password_hash: await hash('123456', 6),
       phone: '(47) 99630-7545',
       city: 'Guramirim',
       cep: '89270-000',
@@ -41,14 +47,9 @@ describe('Create Org', () => {
 
     await expect(async () => {
       await sut.execute({
-        username: 'Lucas',
         email: 'org@example.com',
-        password: '123456',
-        phone: '(47) 99630-7545',
-        city: 'Guramirim',
-        cep: '89270-000',
-        address: 'Rolf passold',
+        password: 'wrong password',
       })
-    }).rejects.toBeInstanceOf(OrgAlreadyExistsError)
+    }).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
 })
