@@ -1,12 +1,12 @@
 import type { Pet, Prisma } from 'generated/prisma/client'
 
 export interface SearchManyQueryiesProps {
-  age?: number | undefined
-  name?: string | undefined
-  size?: 'SMALL' | 'MEDIUM' | 'LARGER' | undefined
-  energy_level?: 'VERY_LOW' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH' | undefined
-  independence_level?: 'LOW' | 'MEDIUM' | 'HIGH' | undefined
-  environment?: 'SMALL' | 'MEDIUM' | 'LARGER' | undefined
+  age?: number
+  name?: string
+  size?: 'SMALL' | 'MEDIUM' | 'LARGER'
+  energy_level?: 'VERY_LOW' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
+  independence_level?: 'LOW' | 'MEDIUM' | 'HIGH'
+  environment?: 'SMALL' | 'MEDIUM' | 'LARGER'
 }
 
 export interface PetsRepository {

@@ -1,9 +1,10 @@
 import type { Pet } from 'generated/prisma/client'
 
 import type { PetsRepository } from '@/repositories/pets-repository'
+import { removeUndefined } from '@/utils/remove-undefined'
 
 interface SearchPetUseCaseRequest {
-  queries: {
+  filters: {
     age?: number
     name?: string
     size?: 'SMALL' | 'MEDIUM' | 'LARGER'
@@ -11,7 +12,6 @@ interface SearchPetUseCaseRequest {
     independenceLevel?: 'LOW' | 'MEDIUM' | 'HIGH'
     environment?: 'SMALL' | 'MEDIUM' | 'LARGER'
   }
-
   page: number
 }
 
@@ -22,15 +22,15 @@ interface SearchPetUseCaseResponse {
 export class SearchPetUseCase {
   constructor(private petsRepository: PetsRepository) {}
 
-  async execute({ queries, page }: SearchPetUseCaseRequest): Promise<SearchPetUseCaseResponse> {
-    const newQueries = {
-      age: queries.age,
-      name: queries.name,
-      size: queries.size,
-      energy_level: queries.energyLevel,
-      environment: queries.environment,
-      independence_level: queries.independenceLevel,
-    }
+  async execute({ filters, page }: SearchPetUseCaseRequest): Promise<SearchPetUseCaseResponse> {
+    const newQueries = removeUndefined({
+      age: filters.age,
+      name: filters.name,
+      size: filters.size,
+      energy_level: filters.energyLevel,
+      environment: filters.environment,
+      independence_level: filters.independenceLevel,
+    })
 
     const pets = await this.petsRepository.searchMany(newQueries, page)
 

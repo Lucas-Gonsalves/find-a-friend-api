@@ -46,7 +46,7 @@ describe('Search Pet Use Case', () => {
     })
 
     const { pets } = await sut.execute({
-      queries: {
+      filters: {
         energyLevel: 'VERY_LOW',
       },
       page: 1,
