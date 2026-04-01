@@ -4,21 +4,21 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryOrgsRepository } from '@/repositories/in-memory/in-memory-orgs-repository'
 import { InMemoryPetsRepository } from '@/repositories/in-memory/in-memory-pets-repository'
 
-import { SearchPetUseCase } from './search-pet'
+import { FetchPetByIdUseCase } from './fetch-pet-by-id'
 
-describe('Search Pet Use Case', () => {
+describe('Fetch Pet By Id Use Case', () => {
   let orgRepository: InMemoryOrgsRepository
   let petRepository: InMemoryPetsRepository
-  let sut: SearchPetUseCase
+  let sut: FetchPetByIdUseCase
 
   beforeEach(() => {
     orgRepository = new InMemoryOrgsRepository()
     petRepository = new InMemoryPetsRepository()
-    sut = new SearchPetUseCase(petRepository)
+    sut = new FetchPetByIdUseCase(petRepository)
   })
 
-  it('should be able to search for pets', async () => {
-    const org = await orgRepository.create({
+  it('should be able to fetch a pet by id', async () => {
+    const firstOrg = await orgRepository.create({
       username: 'Lucas',
       email: 'lucasorg@example.com',
       password_hash: await hash('123456', 6),
@@ -28,31 +28,16 @@ describe('Search Pet Use Case', () => {
       address: 'Rolf passold',
     })
 
-    await petRepository.create({
+    const petCreated = await petRepository.create({
       age: 12,
       name: 'Rex',
       description: 'description',
       image: 'link-of-the-dog-image',
-      org_id: org.id,
+      org_id: firstOrg.id,
     })
 
-    await petRepository.create({
-      age: 12,
-      name: 'Moon',
-      description: 'description',
-      image: 'link-of-the-cat-image',
-      org_id: org.id,
-      energy_level: 'VERY_LOW',
-    })
+    const { pet } = await sut.execute({ id: petCreated.id })
 
-    const { pets } = await sut.execute({
-      queries: {
-        energyLevel: 'VERY_LOW',
-      },
-      page: 1,
-    })
-
-    expect(pets).toHaveLength(1)
-    expect(pets[0]).toMatchObject({ name: 'Moon' })
+    expect(pet).toMatchObject({ id: petCreated.id })
   })
 })

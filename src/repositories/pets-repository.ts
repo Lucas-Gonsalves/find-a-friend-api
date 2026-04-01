@@ -11,7 +11,7 @@ export interface SearchManyQueryiesProps {
 
 export interface PetsRepository {
   create(data: Prisma.PetUncheckedCreateInput): Promise<Pet>
-  findByid(id: string): Promise<Pet | null>
+  findById(id: string): Promise<Pet | null>
   findMany(): Promise<Pet[]>
   searchMany(queries: SearchManyQueryiesProps, page: number): Promise<Pet[]>
 }
