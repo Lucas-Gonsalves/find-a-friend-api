@@ -7,7 +7,7 @@ import type { PetsRepository, SearchManyQueryiesProps } from '../pets-repository
 export class InMemoryPetsRepository implements PetsRepository {
   public items: Pet[] = []
 
-  async findByid(id: string) {
+  async findById(id: string) {
     const pet = this.items.find((pet) => pet.id === id)
 
     if (!pet) {
