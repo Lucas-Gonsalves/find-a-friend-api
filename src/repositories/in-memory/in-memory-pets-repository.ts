@@ -2,9 +2,12 @@ import { randomUUID } from 'node:crypto'
 
 import type { Pet, Prisma } from 'generated/prisma/client'
 
+import type { OrgsRepository } from '../orgs-repository'
 import type { PetsRepository, SearchManyQueryiesProps } from '../pets-repository'
 
 export class InMemoryPetsRepository implements PetsRepository {
+  constructor(private orgsRepository?: OrgsRepository) {}
+
   public items: Pet[] = []
 
   async findById(id: string) {
@@ -17,22 +20,29 @@ export class InMemoryPetsRepository implements PetsRepository {
     return pet
   }
 
-  async searchMany(filters: SearchManyQueryiesProps, page: number) {
-    const pets = this.items
-      .filter((pet) => {
-        return Object.entries(filters).every(([key, value]) => {
-          if (value == null) return true
+  async searchMany(city: string, filters: SearchManyQueryiesProps, page: number) {
+    let pets = this.items.filter((pet) => {
+      return Object.entries(filters).every(([key, value]) => {
+        if (value == null) return true
 
-          const petValue = pet[key as keyof Pet]
+        const petValue = pet[key as keyof Pet]
 
-          if (typeof value === 'string') {
-            return String(petValue).toLowerCase().includes(value.toLowerCase())
-          }
+        if (typeof value === 'string') {
+          return String(petValue).toLowerCase().includes(value.toLowerCase())
+        }
 
-          return petValue === value
-        })
+        return petValue === value
       })
-      .slice((page - 1) * 20, page * 20)
+    })
+
+    if (this.orgsRepository) {
+      const orgs = await this.orgsRepository.findManyByCity(city)
+      const orgIds = new Set(orgs.map((org) => org.id))
+
+      pets = pets.filter((pet) => orgIds.has(pet.org_id))
+    }
+
+    pets = pets.slice((page - 1) * 20, page * 20)
 
     return pets
   }

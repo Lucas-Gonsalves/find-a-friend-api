@@ -13,12 +13,12 @@ describe('Search Pet Use Case', () => {
 
   beforeEach(() => {
     orgRepository = new InMemoryOrgsRepository()
-    petRepository = new InMemoryPetsRepository()
+    petRepository = new InMemoryPetsRepository(orgRepository)
     sut = new SearchPetUseCase(petRepository)
   })
 
-  it('should be able to search for pets', async () => {
-    const org = await orgRepository.create({
+  it('should be able to search for pets by city and filters', async () => {
+    const firstOrg = await orgRepository.create({
       username: 'Lucas',
       email: 'lucasorg@example.com',
       password_hash: await hash('123456', 6),
@@ -28,12 +28,22 @@ describe('Search Pet Use Case', () => {
       address: 'Rolf passold',
     })
 
+    const secondOrg = await orgRepository.create({
+      username: 'Gabriel',
+      email: 'gabrielorg@example.com',
+      password_hash: await hash('123456', 6),
+      phone: '(47) 99630-7545',
+      city: 'Jaragua do Sul',
+      cep: '89270-000',
+      address: 'Rolf passold',
+    })
+
     await petRepository.create({
       age: 12,
       name: 'Rex',
       description: 'description',
       image: 'link-of-the-dog-image',
-      org_id: org.id,
+      org_id: firstOrg.id,
     })
 
     await petRepository.create({
@@ -41,11 +51,21 @@ describe('Search Pet Use Case', () => {
       name: 'Moon',
       description: 'description',
       image: 'link-of-the-cat-image',
-      org_id: org.id,
+      org_id: firstOrg.id,
+      energy_level: 'VERY_LOW',
+    })
+
+    await petRepository.create({
+      age: 10,
+      name: 'Bolt',
+      description: 'description',
+      image: 'link-of-the-other-dog-image',
+      org_id: secondOrg.id,
       energy_level: 'VERY_LOW',
     })
 
     const { pets } = await sut.execute({
+      city: 'Guramirim',
       filters: {
         energyLevel: 'VERY_LOW',
       },

@@ -4,6 +4,7 @@ import type { PetsRepository } from '@/repositories/pets-repository'
 import { removeUndefined } from '@/utils/remove-undefined'
 
 interface SearchPetUseCaseRequest {
+  city: string
   filters: {
     age?: number | undefined
     name?: string | undefined
@@ -22,8 +23,12 @@ interface SearchPetUseCaseResponse {
 export class SearchPetUseCase {
   constructor(private petsRepository: PetsRepository) {}
 
-  async execute({ filters, page }: SearchPetUseCaseRequest): Promise<SearchPetUseCaseResponse> {
-    const newQueries = removeUndefined({
+  async execute({
+    city,
+    filters,
+    page,
+  }: SearchPetUseCaseRequest): Promise<SearchPetUseCaseResponse> {
+    const newFilters = removeUndefined({
       age: filters.age,
       name: filters.name,
       size: filters.size,
@@ -32,7 +37,7 @@ export class SearchPetUseCase {
       independence_level: filters.independenceLevel,
     })
 
-    const pets = await this.petsRepository.searchMany(newQueries, page)
+    const pets = await this.petsRepository.searchMany(city, newFilters, page)
 
     return { pets }
   }

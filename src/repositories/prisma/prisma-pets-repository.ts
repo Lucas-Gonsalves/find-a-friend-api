@@ -19,13 +19,23 @@ export class PrismaPetsRepository implements PetsRepository {
     return pet
   }
 
-  async searchMany(queries: SearchManyQueryiesProps, page: number) {
+  async searchMany(city: string, queries: SearchManyQueryiesProps, page: number) {
     const { name, ...filters } = queries
 
-    const where: Prisma.PetWhereInput = removeUndefined({
-      ...filters,
-      name: name ? { contains: name, mode: 'insensitive' } : undefined,
-    })
+    const where: Prisma.PetWhereInput = {
+      ...removeUndefined({
+        ...filters,
+        name: name ? { contains: name, mode: 'insensitive' } : undefined,
+      }),
+      org: {
+        is: {
+          city: {
+            equals: city,
+            mode: 'insensitive',
+          },
+        },
+      },
+    }
 
     const pets = await prisma.pet.findMany({
       where,

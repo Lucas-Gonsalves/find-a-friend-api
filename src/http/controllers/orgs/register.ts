@@ -28,6 +28,8 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
         message: error.message,
       })
     }
+
+    throw error
   }
 
   return reply.status(201).send()

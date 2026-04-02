@@ -5,6 +5,7 @@ import { makeSearchPetUseCase } from '@/use-cases/factories/make-search-pet-use-
 
 export async function search(request: FastifyRequest, reply: FastifyReply) {
   const searchSchema = z.object({
+    city: z.string(),
     age: z.number().optional(),
     name: z.coerce.string().optional(),
     size: z.enum(['SMALL', 'MEDIUM', 'LARGER']).optional(),
@@ -14,12 +15,12 @@ export async function search(request: FastifyRequest, reply: FastifyReply) {
     page: z.coerce.number(),
   })
 
-  const { age, name, size, energyLevel, independenceLevel, environment, page } = searchSchema.parse(
-    request.query,
-  )
+  const { city, age, name, size, energyLevel, independenceLevel, environment, page } =
+    searchSchema.parse(request.query)
 
   const searchPetUseCase = makeSearchPetUseCase()
   const { pets } = await searchPetUseCase.execute({
+    city: city,
     filters: {
       age,
       name,

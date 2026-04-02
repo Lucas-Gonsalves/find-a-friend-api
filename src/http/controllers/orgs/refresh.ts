@@ -1,5 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
+import { env } from '@/env'
+
 export async function refresh(request: FastifyRequest, reply: FastifyReply) {
   await request.jwtVerify({ onlyCookie: true })
 
@@ -19,7 +21,7 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
   return reply
     .setCookie('refreshToken', refreshToken, {
       path: '/',
-      secure: true,
+      secure: env.NODE_ENV === 'production',
       sameSite: true,
       httpOnly: true,
     })

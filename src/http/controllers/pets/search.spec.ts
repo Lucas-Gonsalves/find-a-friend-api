@@ -13,8 +13,13 @@ describe('Search Pet (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to search pets by categories', async () => {
+  it('should be able to search pets by city and categories', async () => {
     const { accessToken } = await createAndAuthenticateOrg(app)
+    const { accessToken: secondOrgAccessToken } = await createAndAuthenticateOrg(app, {
+      username: 'Gabriel',
+      email: 'gabrielorg@example.com',
+      city: 'Jaragua do Sul',
+    })
 
     await request(app.server)
       .post('/pets')
@@ -46,10 +51,25 @@ describe('Search Pet (e2e)', () => {
         adoptionRequirement: ['It need a lot of love'],
       })
 
+    await request(app.server)
+      .post('/pets')
+      .set('Authorization', `Bearer ${secondOrgAccessToken}`)
+      .send({
+        age: 8,
+        name: 'Bolt',
+        description: 'description',
+        image: 'link-of-the-other-dog-image',
+        size: 'MEDIUM',
+        energyLevel: 'HIGH',
+        independenceLevel: 'MEDIUM',
+        environment: 'SMALL',
+        adoptionRequirement: ['It need a lot of love'],
+      })
+
     const response = await request(app.server)
       .get('/pets')
       .set('Authorization', `Bearer ${accessToken}`)
-      .query({ energyLevel: 'HIGH', page: 1 })
+      .query({ city: 'Guramirim', energyLevel: 'HIGH', page: 1 })
 
     expect(response.statusCode).toBe(200)
     expect(response.body.pets).toHaveLength(1)
