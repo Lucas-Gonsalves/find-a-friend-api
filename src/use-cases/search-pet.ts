@@ -5,12 +5,12 @@ import { removeUndefined } from '@/utils/remove-undefined'
 
 interface SearchPetUseCaseRequest {
   filters: {
-    age?: number
-    name?: string
-    size?: 'SMALL' | 'MEDIUM' | 'LARGER'
-    energyLevel?: 'VERY_LOW' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH'
-    independenceLevel?: 'LOW' | 'MEDIUM' | 'HIGH'
-    environment?: 'SMALL' | 'MEDIUM' | 'LARGER'
+    age?: number | undefined
+    name?: string | undefined
+    size?: 'SMALL' | 'MEDIUM' | 'LARGER' | undefined
+    energyLevel?: 'VERY_LOW' | 'LOW' | 'MEDIUM' | 'HIGH' | 'VERY_HIGH' | undefined
+    independenceLevel?: 'LOW' | 'MEDIUM' | 'HIGH' | undefined
+    environment?: 'SMALL' | 'MEDIUM' | 'LARGER' | undefined
   }
   page: number
 }

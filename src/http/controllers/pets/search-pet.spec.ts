@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { app } from '@/app'
 import { createAndAuthenticateOrg } from '@/utils/test/create-and-authenticate-org'
 
-describe('City Search Pet (e2e)', () => {
+describe('Search Pet (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -13,8 +13,23 @@ describe('City Search Pet (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to search pets by city', async () => {
+  it('should be able to search pets by categories', async () => {
     const { accessToken } = await createAndAuthenticateOrg(app)
+
+    await request(app.server)
+      .post('/pets')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        age: 16,
+        name: 'Moon',
+        description: 'description',
+        image: 'link-of-the-dog-image',
+        size: 'MEDIUM',
+        energyLevel: 'HIGH',
+        independenceLevel: 'MEDIUM',
+        environment: 'SMALL',
+        adoptionRequirement: ['It need a lot of love', 'It need aways to stay with you'],
+      })
 
     await request(app.server)
       .post('/pets')
@@ -28,17 +43,17 @@ describe('City Search Pet (e2e)', () => {
         energyLevel: 'LOW',
         independenceLevel: 'MEDIUM',
         environment: 'SMALL',
-        adoptionRequirement: ['It need a lot of love', 'It need aways to stay with you'],
+        adoptionRequirement: ['It need a lot of love'],
       })
 
     const response = await request(app.server)
-      .get('/pets/city')
+      .get('/pets')
       .set('Authorization', `Bearer ${accessToken}`)
-      .query({ city: 'Guramirim' })
+      .query({ energyLevel: 'HIGH', page: 1 })
 
     expect(response.statusCode).toBe(200)
     expect(response.body.pets[0]).toMatchObject({
-      name: 'Rex',
+      name: 'Moon',
     })
   })
 })
