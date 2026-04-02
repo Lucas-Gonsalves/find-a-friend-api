@@ -6,7 +6,7 @@ import { makeSearchPetUseCase } from '@/use-cases/factories/make-search-pet-use-
 export async function search(request: FastifyRequest, reply: FastifyReply) {
   const searchSchema = z.object({
     age: z.number().optional(),
-    name: z.string().optional(),
+    name: z.coerce.string().optional(),
     size: z.enum(['SMALL', 'MEDIUM', 'LARGER']).optional(),
     energyLevel: z.enum(['VERY_LOW', 'LOW', 'MEDIUM', 'HIGH', 'VERY_HIGH']).optional(),
     independenceLevel: z.enum(['LOW', 'MEDIUM', 'HIGH']).optional(),

@@ -5,7 +5,7 @@ import { makeCreatePetUseCase } from '@/use-cases/factories/make-create-pet-use-
 
 export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createBodySchema = z.object({
-    age: z.number(),
+    age: z.coerce.number(),
     name: z.string(),
     description: z.string(),
     image: z.string(),

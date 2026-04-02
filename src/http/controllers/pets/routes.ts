@@ -10,8 +10,9 @@ import { searchById } from './search-by-id'
 export async function petsRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
 
-  app.post('/pets', create)
   app.get('/pets', search)
   app.get('/pets/:id', searchById)
   app.get('/pets/city/:city', searchByCity)
+
+  app.post('/pets', create)
 }
