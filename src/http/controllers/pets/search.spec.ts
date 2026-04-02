@@ -52,6 +52,7 @@ describe('Search Pet (e2e)', () => {
       .query({ energyLevel: 'HIGH', page: 1 })
 
     expect(response.statusCode).toBe(200)
+    expect(response.body.pets).toHaveLength(1)
     expect(response.body.pets[0]).toMatchObject({
       name: 'Moon',
     })

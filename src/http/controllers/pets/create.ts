@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { makeCreatePetUseCase } from '@/use-cases/factories/make-create-pet-use-case'
 
-export async function createPet(request: FastifyRequest, reply: FastifyReply) {
-  const createPetBodySchema = z.object({
+export async function create(request: FastifyRequest, reply: FastifyReply) {
+  const createBodySchema = z.object({
     age: z.number(),
     name: z.string(),
     description: z.string(),
@@ -16,7 +16,7 @@ export async function createPet(request: FastifyRequest, reply: FastifyReply) {
     adoptionRequirement: z.array(z.string()),
   })
 
-  const petData = createPetBodySchema.parse(request.body)
+  const petData = createBodySchema.parse(request.body)
 
   const orgId = request.user.sub
 

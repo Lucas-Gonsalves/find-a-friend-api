@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { makeSearchPetUseCase } from '@/use-cases/factories/make-search-pet-use-case'
 
-export async function searchPet(request: FastifyRequest, reply: FastifyReply) {
-  const searchPetQuerySchema = z.object({
+export async function search(request: FastifyRequest, reply: FastifyReply) {
+  const searchSchema = z.object({
     age: z.number().optional(),
     name: z.string().optional(),
     size: z.enum(['SMALL', 'MEDIUM', 'LARGER']).optional(),
@@ -14,8 +14,9 @@ export async function searchPet(request: FastifyRequest, reply: FastifyReply) {
     page: z.coerce.number(),
   })
 
-  const { age, name, size, energyLevel, independenceLevel, environment, page } =
-    searchPetQuerySchema.parse(request.query)
+  const { age, name, size, energyLevel, independenceLevel, environment, page } = searchSchema.parse(
+    request.query,
+  )
 
   const searchPetUseCase = makeSearchPetUseCase()
   const { pets } = await searchPetUseCase.execute({

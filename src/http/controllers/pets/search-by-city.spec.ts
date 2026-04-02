@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { app } from '@/app'
 import { createAndAuthenticateOrg } from '@/utils/test/create-and-authenticate-org'
 
-describe('City Search Pet (e2e)', () => {
+describe('Search Pet By City (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -34,7 +34,7 @@ describe('City Search Pet (e2e)', () => {
     const city = 'Guramirim'
 
     const response = await request(app.server)
-      .get(`/pets/${city}`)
+      .get(`/pets/city/${city}`)
       .set('Authorization', `Bearer ${accessToken}`)
 
     expect(response.statusCode).toBe(200)
