@@ -31,10 +31,11 @@ describe('City Search Pet (e2e)', () => {
         adoptionRequirement: ['It need a lot of love', 'It need aways to stay with you'],
       })
 
+    const city = 'Guramirim'
+
     const response = await request(app.server)
-      .get('/pets/city')
+      .get(`/pets/${city}`)
       .set('Authorization', `Bearer ${accessToken}`)
-      .query({ city: 'Guramirim' })
 
     expect(response.statusCode).toBe(200)
     expect(response.body.pets[0]).toMatchObject({

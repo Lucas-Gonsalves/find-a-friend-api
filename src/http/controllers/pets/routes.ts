@@ -10,6 +10,6 @@ export async function petsRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
 
   app.post('/pets', createPet)
-  app.get('/pets/city', citySearchPet)
+  app.get('/pets/:city', citySearchPet)
   app.get('/pets', searchPet)
 }
